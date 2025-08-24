@@ -182,7 +182,7 @@
                         <h3 id="residencesTitle" class="font-display text-3xl font-bold mb-6 text-center text-accent">Résidences</h3>
                         <ul class="space-y-4 text-lg">
                             <li id="javaResidence" class="flex items-center"><span class="text-accent mr-3">●</span><strong>LA JAVA (Niort)</strong> - Un jeudi par mois</li>
-                            <li id="lsfResidence" class="flex items-center"><span class="text-accent mr-3">●</span><strong>Soiree (Niort)</strong> - Un vendredi par mois</li>
+                            <li id="lsfResidence" class="flex items-center"><span class="text-accent mr-3">●</span><strong>Soiree LSF (Niort)</strong> - Un vendredi par mois</li>
                             <li id="otherNiortResidences" class="flex items-center"><span class="text-accent mr-3">●</span>Soirées régulières dans divers lieux niortais</li>
                         </ul>
                     </div>
@@ -258,7 +258,7 @@
                 experienceTitle: "Expérience & Références",
                 residencesTitle: "Résidences",
                 javaResidence: "LA JAVA (Niort) - Un jeudi par mois",
-                lsfResidence: "LSF (Niort) - Un vendredi par mois",
+                lsfResidence: "Soirée LSF (Niort) - Un vendredi par mois",
                 otherNiortResidences: "Soirées régulières dans divers lieux niortais",
                 festivalsTitle: "Festivals & Événements",
                 onlySalsaFestival: "Only Salsa Festival (La Rochelle)",
@@ -298,7 +298,7 @@
                 experienceTitle: "Experience & References",
                 residencesTitle: "Residencies",
                 javaResidence: "LA JAVA (Niort) - One Thursday per month",
-                lsfResidence: "LSF (Niort) - One Friday per month",
+                lsfResidence: "Party LSF (Niort) - One Friday per month",
                 otherNiortResidences: "Regular parties in various Niort venues",
                 festivalsTitle: "Festivals & Events",
                 onlySalsaFestival: "Only Salsa Festival (La Rochelle)",
@@ -338,7 +338,7 @@
                 experienceTitle: "경험 및 경력",
                 residencesTitle: "상주 공연",
                 javaResidence: "LA JAVA (니오르) - 매월 셋째 목요일",
-                lsfResidence: "LSF (니오르) - 매월 셋째 금요일",
+                lsfResidence: "파티 LSF (니오르) - 매월 셋째 금요일",
                 otherNiortResidences: "니오르의 다양한 장소에서 정기적인 파티",
                 festivalsTitle: "페스티벌 및 이벤트",
                 onlySalsaFestival: "온리 살사 페스티벌 (라 로셸)",
@@ -378,7 +378,7 @@
             document.getElementById('experienceTitle').textContent = t.experienceTitle;
             document.getElementById('residencesTitle').textContent = t.residencesTitle;
             document.getElementById('javaResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>LA JAVA (Niort)</strong> - ${t.javaResidence.split(' - ')[1]}`;
-            document.getElementById('lsfResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>LSF (Niort)</strong> - ${t.lsfResidence.split(' - ')[1]}`;
+            document.getElementById('lsfResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>Soirée LSF (Niort)</strong> - ${t.lsfResidence.split(' - ')[1]}`;
             document.getElementById('otherNiortResidences').innerHTML = `<span class="text-accent mr-3">●</span>${t.otherNiortResidences}`;
             document.getElementById('festivalsTitle').textContent = t.festivalsTitle;
             document.getElementById('onlySalsaFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> ${t.onlySalsaFestival.split('Festival ')[1]}`;
