@@ -378,7 +378,8 @@
             document.getElementById('experienceTitle').textContent = t.experienceTitle;
             document.getElementById('residencesTitle').textContent = t.residencesTitle;
             document.getElementById('javaResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>LA JAVA (Niort)</strong> - ${t.javaResidence.split(' - ')[1]}`;
-            document.getElementById('lsfResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>Soirée LSF (Niort)</strong> - ${t.lsfResidence.split(' - ')[1]}`;
+            <!-- document.getElementById('lsfResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>Soirée LSF (Niort)</strong> - ${t.lsfResidence.split(' - ')[1]}`; -->
+            document.getElementById('lsfResidence').innerHTML = t.lsfResidence;    
             document.getElementById('otherNiortResidences').innerHTML = `<span class="text-accent mr-3">●</span>${t.otherNiortResidences}`;
             document.getElementById('festivalsTitle').textContent = t.festivalsTitle;
             document.getElementById('onlySalsaFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> ${t.onlySalsaFestival.split('Festival ')[1]}`;
