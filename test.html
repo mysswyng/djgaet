@@ -26,8 +26,6 @@
         .text-accent { color: #FF6B6B; }
         .border-accent { border-color: #FF6B6B; }
 
-        /* Suppression des styles bleus et réaffectation */
-
         .btn {
             display: inline-block;
             padding: 0.75rem 1.5rem;
@@ -108,7 +106,8 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            z-index: 50; 
+            z-index: 100; /* Z-index augmenté pour assurer la cliquabilité sur mobile */
+            cursor: pointer;
         }
         .disclaimer-note {
             background-color: #fff;
@@ -181,6 +180,7 @@
 
     <!-- Header / Hero Section -->
     <header id="home" class="h-dvh min-h-[600px] flex flex-col items-center justify-center text-center p-6 bg-secondary header-glow relative z-20">
+        <!-- Z-index augmenté et positionnement ajusté via le CSS pour assurer la cliquabilité mobile -->
         <div class="language-selector">
             <label for="language-select" class="sr-only">Choisir la langue</label>
             <select id="language-select" class="bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-accent focus:border-accent sm:text-sm">
@@ -240,7 +240,6 @@
                 <!-- Conteneur des Tags en forme de carrés -->
                 <div id="genre-tags" class="flex flex-wrap justify-center gap-6 p-4">
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="salsa" id="salsaTag">
-                        <!-- CHANGEMENT ICI : Chili Pepper remplacé par Danseuse -->
                         <span class="text-3xl mb-2">💃</span>Salsa
                     </span>
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="bachata" id="bachataTag">
@@ -602,6 +601,13 @@
 
             // Interactive Genre Tags (maintenant pour ouvrir la modale)
             const genreTagsContainer = document.getElementById('genre-tags');
+            
+            // FIX MOBILE 1 : Ajout d'un écouteur 'touchstart' pour améliorer la réactivité tactile sur certains navigateurs mobiles
+            genreTagsContainer.addEventListener('touchstart', function(e) { 
+                // Permet au click de se déclencher correctement
+                e.stopPropagation(); 
+            }, { passive: true });
+
 
             genreTagsContainer.addEventListener('click', function(e) {
                 // S'assurer qu'on clique sur le tag ou un de ses enfants
