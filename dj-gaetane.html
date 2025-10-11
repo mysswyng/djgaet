@@ -394,7 +394,12 @@
             document.getElementById('contactDescription').textContent = t.contactDescription;
 
             // Update genre descriptions
-            const currentActiveGenre = document.querySelector('#genre-tags .tag.active').dataset.genre;
+            <!--const currentActiveGenre = document.querySelector('#genre-tags .tag.active').dataset.genre;-->
+            const activeTag = document.querySelector('#genre-tags .tag.active');
+            let activeGenre = 'salsa'; // Genre par défaut
+            if (activeTag) {
+                activeGenre = activeTag.dataset.genre;
+            }
             updateDescription(currentActiveGenre, lang); // Pass language to updateDescription
 
             // Update chart title
