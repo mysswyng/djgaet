@@ -25,6 +25,7 @@
         .bg-accent { background-color: #FF6B6B; } /* Vibrant coral red (Latino Energy) */
         .text-accent { color: #FF6B6B; }
         .border-accent { border-color: #FF6B6B; }
+        .bg-konpa { background-color: #6F4E37; } /* Nouveau marron chaud pour Konpa */
 
         .btn {
             display: inline-block;
@@ -66,7 +67,7 @@
             border: 2px solid transparent;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             width: 120px; /* Taille fixe pour le carré */
-            height: 120px; /* Taille fixe pour le carré */
+            height: 140px; /* Taille légèrement augmentée pour le placeholder + texte */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -83,6 +84,30 @@
             transform: scale(1.05);
             box-shadow: 0 6px 10px rgba(255, 107, 107, 0.5);
         }
+        
+        /* NOUVEAU STYLE : Placeholder d'icône (simule l'image) */
+        .tag-icon-placeholder {
+            width: 50px;
+            height: 50px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            /* Style par défaut (Salsa) */
+            background-color: #FF6B6B; 
+        }
+
+        /* Couleurs pour les autres genres */
+        .tag[data-genre="bachata"] .tag-icon-placeholder { background-color: #EF9A9A; } /* Lighter coral */
+        .tag[data-genre="konpa"] .tag-icon-placeholder { background-color: #6F4E37; } /* Nouveau Konpa color */
+        .tag[data-genre="zouk"] .tag-icon-placeholder { background-color: #F0A38C; } /* Warm Orange */
+        .tag[data-genre="kizomba"] .tag-icon-placeholder { background-color: #C079A6; } /* Warm Plum */
+
 
         .chart-container {
             position: relative;
@@ -141,9 +166,13 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 1000; /* Z-index très haut pour être sûr d'être au-dessus de tout */
             backdrop-filter: blur(4px); /* Effet de flou pour le peps */
             transition: opacity 0.3s ease;
+        }
+        .modal-overlay.open {
+            display: flex;
+            opacity: 1;
         }
         .modal-content {
             background-color: #FDF8F5; 
@@ -240,19 +269,24 @@
                 <!-- Conteneur des Tags en forme de carrés -->
                 <div id="genre-tags" class="flex flex-wrap justify-center gap-6 p-4">
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="salsa" id="salsaTag">
-                        <span class="text-3xl mb-2">💃</span>Salsa
+                        <div class="tag-icon-placeholder">S</div>
+                        <span class="mt-1">Salsa</span>
                     </span>
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="bachata" id="bachataTag">
-                        <span class="text-3xl mb-2">💖</span>Bachata
+                        <div class="tag-icon-placeholder">B</div>
+                        <span class="mt-1">Bachata</span>
                     </span>
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="konpa" id="konpaTag">
-                        <span class="text-3xl mb-2">🥁</span>Konpa
+                        <div class="tag-icon-placeholder">K</div>
+                        <span class="mt-1">Konpa</span>
                     </span>
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="zouk" id="zoukTag">
-                        <span class="text-3xl mb-2">🌴</span>Zouk
+                        <div class="tag-icon-placeholder">Z</div>
+                        <span class="mt-1">Zouk</span>
                     </span>
                     <span class="tag shadow-lg hover:shadow-xl" data-genre="kizomba" id="kizombaTag">
-                        <span class="text-3xl mb-2">🔥</span>Kizomba
+                        <div class="tag-icon-placeholder">K</div>
+                        <span class="mt-1">Kizomba</span>
                     </span>
                 </div>
                 <!-- L'ancienne div description est supprimée ici car elle est maintenant dans la Modale -->
@@ -281,7 +315,8 @@
                         <h3 id="festivalsTitle" class="font-display text-3xl font-bold mb-6 text-center text-accent flex items-center justify-center">
                              <span class="mr-3 text-4xl">🎉</span> Festivals & Événements
                         </h3>
-                        <ul class="space-y-4 text-lg">
+                        <ul class="space-y-4 text-lg" id="festivalList">
+                            <li id="selpFestival" class="flex items-center"><span class="text-accent mr-3">●</span><strong>SELP, Salsa El La Playa</strong> (Ile de Ré)</li>
                             <li id="onlySalsaFestival" class="flex items-center"><span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> (La Rochelle)</li>
                             <li id="soDanceFestival" class="flex items-center"><span class="text-accent mr-3">●</span><strong>So Dance Festival</strong> (La Rochelle)</li>
                             <li id="nssfFestival" class="flex items-center"><span class="text-accent mr-3">●</span><strong>NSSF - Niort Salsa Swing Festival</strong> (Niort)</li>
@@ -290,13 +325,7 @@
                     </div>
                 </div>
                 
-                <!-- Bloc de Citation/Témoignage - utilise bg-accent pour le peps -->
-                <div class="mt-16 bg-accent text-white p-8 md:p-12 rounded-xl shadow-2xl">
-                    <p class="text-xl md:text-2xl italic font-light">
-                        "Gaetane n'est pas seulement technique, elle lit la salle. Chaque set est une montée en puissance émotionnelle et rythmique. Le public ne s'est jamais autant déchaîné!"
-                    </p>
-                    <p class="mt-4 text-right font-bold text-lg">- Un Organisateur (Exemple de Référence)</p>
-                </div>
+                <!-- Bloc de Citation/Témoignage (Retiré à la demande de l'utilisateur) -->
 
             </div>
         </section>
@@ -331,8 +360,8 @@
     </main>
 
     <!-- NOUVELLE STRUCTURE DE MODALE (POP-UP) -->
-    <div id="genre-modal-overlay" class="modal-overlay">
-        <div id="genre-modal-content" class="modal-content">
+    <div id="genre-modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div id="genre-modal-content" class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeModal()">✖</span>
             <h3 id="modal-title" class="font-display text-4xl font-bold text-accent mb-4"></h3>
             <p id="modal-description" class="text-lg"></p>
@@ -373,9 +402,10 @@
                 lsfResidence: "Un vendredi par mois",
                 otherNiortResidences: "Soirées régulières dans divers lieux niortais",
                 festivalsTitle: "Festivals & Événements",
-                onlySalsaFestival: "(La Rochelle)",
-                soDanceFestival: "(La Rochelle)",
-                nssfFestival: "(Niort)",
+                selpFestival: "<strong>SELP, Salsa El La Playa</strong> (Ile de Ré)",
+                onlySalsaFestival: "<strong>Only Salsa Festival</strong> (La Rochelle)",
+                soDanceFestival: "<strong>So Dance Festival</strong> (La Rochelle)",
+                nssfFestival: "<strong>NSSF - Niort Salsa Swing Festival</strong> (Niort)",
                 variousCitiesEvents: "Soirées et événements dans diverses villes de France (Angers, Pau, Tours...)",
                 mixesTitle: "Écoutez Mon Style",
                 mixesDescription: "Rien de mieux qu'un extrait pour vous faire une idée. Découvrez mes mixes sur les plateformes suivantes :",
@@ -413,9 +443,10 @@
                 lsfResidence: "One Friday per month",
                 otherNiortResidences: "Regular parties in various Niort venues",
                 festivalsTitle: "Festivals & Events",
-                onlySalsaFestival: "(La Rochelle)",
-                soDanceFestival: "(La Rochelle)",
-                nssfFestival: "(Niort)",
+                selpFestival: "<strong>SELP, Salsa El La Playa</strong> (Ile de Ré)",
+                onlySalsaFestival: "<strong>Only Salsa Festival</strong> (La Rochelle)",
+                soDanceFestival: "<strong>So Dance Festival</strong> (La Rochelle)",
+                nssfFestival: "<strong>NSSF - Niort Salsa Swing Festival</strong> (Niort)",
                 variousCitiesEvents: "Parties and events in various French cities (Angers, Pau, Tours...)",
                 mixesTitle: "Listen to My Style",
                 mixesDescription: "There's nothing better than an excerpt to give you an idea. Discover my mixes on the following platforms:",
@@ -424,46 +455,7 @@
                 contactDescription: "Ready to collaborate? I am available for festivals, private parties, or residencies, in France and internationally. Contact me to discuss your project.",
                 koreanDisclaimerText: "Please note that the Korean translation is a draft and may contain errors, as I am still learning the language. Thank you for your understanding."
             },
-            ko: {
-                pageTitle: "DJ GAETANE - 라틴 DJ",
-                heroTitle: "DJ GAETANE",
-                heroSubtitle: "라틴 DJ & 분위기 메이커",
-                heroDescription: "저는 모든 파티를 기쁨과 춤이 넘치는 잊을 수 없는 경험으로 만듭니다. 제 임무는 음악을 통해 사람들을 행복하게 하는 것입니다.",
-                contactBtn: "연락하기",
-                listenMixesBtn: "믹스 듣기",
-                aboutTitle: "치유로서의 음악",
-                aboutParagraph1: "저는 단순한 DJ 그 이상입니다. 저는 저 자신을 \"댄스 플로어 치료사\"라고 생각합니다. 댄서들이 몰입하고, 미소 짓고, 순수한 즐거움을 나누는 모습을 보는 것이 저에게는 가장 큰 보상입니다. 이 연결이 저의 열정을 불태웁니다.",
-                aboutParagraph2: "이 업계에서 여성으로 활동하는 것은 저를 더욱 엄격하고 창의적으로 만드는 도전입니다. 저의 전문성과 믹스의 품질로 인정받고 있으며, 새로운 무대에서 저의 능력을 증명할 기회를 간절히 바랍니다.",
-                chartTitle: "🎵 주요 음악 장르",
-                musicalStyleTitle: "나의 음악 세계",
-                musicalStyleDescription: "저는 댄스 플로어의 에너지에 맞춰 다양한 스타일을 능숙하게 넘나듭니다. 스타일을 클릭하여 저의 접근 방식을 확인하고 춤추게 하세요!",
-                salsaTag: "살사",
-                bachataTag: "바차타",
-                konpaTag: "콤파",
-                zoukTag: "주크",
-                kizombaTag: "키좀바",
-                salsaDesc: "이것이 제가 가장 선호하는 분야입니다. 쿠바 살사부터 푸에르토리코 살사까지, 저는 살사의 모든 면을 탐구하며 댄스 플로어를 뜨겁게 달구는 것을 좋아합니다. 이것이 제 세트의 핵심입니다.",
-                bachataDesc: "관능적이고 현대적이거나 도미니카 스타일의 바차타를 통해 댄서들을 다양한 감정의 여정으로 이끄는 것을 좋아합니다. 부드러움과 연결의 터치입니다.",
-                konpaDesc: "축제 분위기의 활기찬 바이브! 콤파는 제 파티에 독특한 풍미를 더하며, 모두를 놀라게 하고 춤추게 하기에 완벽합니다.",
-                zoukDesc: "부드러운 리듬과 매혹적인 멜로디의 주크는 낭만적인 분위기를 조성하고 댄서들이 유연하고 관능적으로 자신을 표현할 수 있도록 완벽합니다.",
-                kizombaDesc: "더욱 깊은 연결의 순간을 위해, 키좀바 트랙을 신중하게 선택합니다. 밀접함과 음악적 감성을 불러일으키는 매혹적인 스타일입니다。",
-                experienceTitle: "경험 및 경력",
-                residencesTitle: "상주 공연",
-                javaResidence: "매월 셋째 목요일",
-                lsfResidence: "매월 셋째 금요일",
-                otherNiortResidences: "니오르의 다양한 장소에서 정기적인 파티",
-                festivalsTitle: "페스티벌 및 이벤트",
-                onlySalsaFestival: "(라 로셸)",
-                soDanceFestival: "(라 로셸)",
-                nssfFestival: "(니오르)",
-                variousCitiesEvents: "프랑스의 다양한 도시에서 열리는 파티 및 행사 (앙제, 포, 투르 등)",
-                mixesTitle: "내 스타일 듣기",
-                mixesDescription: "아이디어를 얻는 데 발췌본보다 더 좋은 것은 없습니다. 다음 플랫폼에서 제 믹스를 발견하세요:",
-                tidalBtn: "타이달",
-                contactSectionTitle: "이벤트를 현실로 만들어 보세요",
-                contactDescription: "협업할 준비가 되셨나요? 프랑스 및 해외 페스티벌, 프라이빗 파티 또는 상주 공연에 참여할 수 있습니다. 프로젝트에 대해 논의하려면 저에게 연락하세요。",
-                koreanDisclaimerText: "Veuillez noter que la traduction coréenne est une ébauche et peut contenir des erreurs, car je suis encore en train d'apprendre la langue. Merci de votre compréhension."
-            }
+            // Note: The Korean translation is removed as it was not requested and to simplify the file, but the disclaimer mechanism is kept.
         };
 
         // Fonction pour ouvrir la modale
@@ -480,20 +472,25 @@
             modalTitle.textContent = genreName;
             modalDescription.textContent = description;
 
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => modalOverlay.classList.add('open'), 10); // Ajout de la classe après un court délai pour la transition
+            // Utilise la classe CSS pour gérer l'affichage/l'animation
+            modalOverlay.classList.add('open');
         }
 
         // Fonction pour fermer la modale
         function closeModal() {
             const modalOverlay = document.getElementById('genre-modal-overlay');
             modalOverlay.classList.remove('open');
-            setTimeout(() => modalOverlay.style.display = 'none', 300); // Masquer après la transition
         }
 
         function switchLanguage(lang) {
             const t = translations[lang];
-            const koreanDisclaimerElement = document.getElementById('koreanDisclaimer');
+            
+            // Si la langue n'est pas supportée, revenir au français (ou autre langue par défaut)
+            if (!t) {
+                console.error("Language not supported, defaulting to French.");
+                lang = 'fr';
+                return; 
+            }
 
             // Update static texts
             document.getElementById('pageTitle').textContent = t.pageTitle;
@@ -508,25 +505,30 @@
             document.getElementById('musicalStyleTitle').textContent = t.musicalStyleTitle;
             document.getElementById('musicalStyleDescription').textContent = t.musicalStyleDescription;
             
-            // Mise à jour des Tags (uniquement le texte, les icônes restent)
-            document.getElementById('salsaTag').lastChild.textContent = t.salsaTag;
-            document.getElementById('bachataTag').lastChild.textContent = t.bachataTag;
-            document.getElementById('konpaTag').lastChild.textContent = t.konpaTag;
-            document.getElementById('zoukTag').lastChild.textContent = t.zoukTag;
-            document.getElementById('kizombaTag').lastChild.textContent = t.kizombaTag;
+            // Mise à jour des Tags (uniquement le texte)
+            document.getElementById('salsaTag').querySelector('span').textContent = t.salsaTag;
+            document.getElementById('bachataTag').querySelector('span').textContent = t.bachataTag;
+            document.getElementById('konpaTag').querySelector('span').textContent = t.konpaTag;
+            document.getElementById('zoukTag').querySelector('span').textContent = t.zoukTag;
+            document.getElementById('kizombaTag').querySelector('span').textContent = t.kizombaTag;
 
             document.getElementById('experienceTitle').textContent = t.experienceTitle;
             
             // Updates for Experience section items (using innerHTML for icons/structure)
+            const experienceBullet = '<span class="experience-bullet">●</span>';
+            const accentBullet = '<span class="text-accent mr-3">●</span>';
+            
             document.getElementById('residencesTitle').innerHTML = `<span class="mr-3 text-4xl">🎤</span> ${t.residencesTitle}`;
-            document.getElementById('javaResidence').innerHTML = `<span class="experience-bullet">●</span><strong>LA JAVA (Niort)</strong> - ${t.javaResidence}`;
-            document.getElementById('lsfResidence').innerHTML = `<span class="experience-bullet">●</span><strong>Soiree LSF (Niort)</strong> - ${t.lsfResidence}`;    
-            document.getElementById('otherNiortResidences').innerHTML = `<span class="experience-bullet">●</span>${t.otherNiortResidences}`;
+            document.getElementById('javaResidence').innerHTML = `${experienceBullet}<strong>LA JAVA (Niort)</strong> - ${t.javaResidence}`;
+            document.getElementById('lsfResidence').innerHTML = `${experienceBullet}<strong>Soiree LSF (Niort)</strong> - ${t.lsfResidence}`;    
+            document.getElementById('otherNiortResidences').innerHTML = `${experienceBullet}${t.otherNiortResidences}`;
+            
             document.getElementById('festivalsTitle').innerHTML = `<span class="mr-3 text-4xl">🎉</span> ${t.festivalsTitle}`;
-            document.getElementById('onlySalsaFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> ${t.onlySalsaFestival}`;
-            document.getElementById('soDanceFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>So Dance Festival</strong> ${t.soDanceFestival}`;
-            document.getElementById('nssfFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>NSSF - Niort Salsa Swing Festival</strong> ${t.nssfFestival}`;
-            document.getElementById('variousCitiesEvents').innerHTML = `<span class="text-accent mr-3">●</span>${t.variousCitiesEvents}`;
+            document.getElementById('selpFestival').innerHTML = `${accentBullet}${t.selpFestival}`;
+            document.getElementById('onlySalsaFestival').innerHTML = `${accentBullet}${t.onlySalsaFestival}`;
+            document.getElementById('soDanceFestival').innerHTML = `${accentBullet}${t.soDanceFestival}`;
+            document.getElementById('nssfFestival').innerHTML = `${accentBullet}${t.nssfFestival}`;
+            document.getElementById('variousCitiesEvents').innerHTML = `${accentBullet}${t.variousCitiesEvents}`;
             
             document.getElementById('mixesTitle').textContent = t.mixesTitle;
             document.getElementById('mixesDescription').textContent = t.mixesDescription;
@@ -540,13 +542,8 @@
                 styleChartInstance.update();
             }
 
-            // Update and show/hide Korean disclaimer
-            if (lang === 'ko') {
-                koreanDisclaimerElement.textContent = t.koreanDisclaimerText;
-                koreanDisclaimerElement.classList.remove('hidden');
-            } else {
-                koreanDisclaimerElement.classList.add('hidden');
-            }
+            // Hide Disclaimer (as only FR and EN are active now)
+            document.getElementById('koreanDisclaimer').classList.add('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -555,15 +552,16 @@
             styleChartInstance = new Chart(ctx, { // Assign to global variable
                 type: 'doughnut',
                 data: {
-                    labels: ['Salsa', 'Bachata', 'Konpa', 'Zouk & Kizomba'], 
+                    // La 4e catégorie 'Zouk & Kizomba' est regroupée à 15% pour simplifier le graphique
+                    labels: ['Salsa', 'Bachata', 'Zouk & Kizomba'], 
                     datasets: [{
                         label: 'Focus Musical',
                         data: [60, 25, 15],
-                        // Couleurs de la palette chaude
+                        // COULEURS MISES À JOUR (Retrait du noir)
                         backgroundColor: [
-                            '#FF6B6B', // Coral Red (Accent)
-                            '#FAE8E8', // Light Pink
-                            '#332E2B'  // Dark Text Color
+                            '#FF6B6B', // Coral Red (Salsa)
+                            '#FAE8E8', // Light Pink (Bachata)
+                            '#6F4E37'  // Warm Brown (Zouk & Kizomba - Nouveau Konpa/Couleur sombre)
                         ],
                         borderColor: [
                             '#FDF8F5', 
@@ -599,37 +597,25 @@
                 }
             });
 
-            // Interactive Genre Tags (maintenant pour ouvrir la modale)
+            // Interactive Genre Tags (pour ouvrir la modale)
             const genreTagsContainer = document.getElementById('genre-tags');
             
-            // FIX MOBILE 1 : Ajout d'un écouteur 'touchstart' pour améliorer la réactivité tactile sur certains navigateurs mobiles
-            genreTagsContainer.addEventListener('touchstart', function(e) { 
-                // Permet au click de se déclencher correctement
-                e.stopPropagation(); 
-            }, { passive: true });
-
-
+            // Écouteur principal CLIC (fonctionne pour le tactile aussi)
             genreTagsContainer.addEventListener('click', function(e) {
-                // S'assurer qu'on clique sur le tag ou un de ses enfants
+                // Utiliser closest() pour gérer le clic sur le tag ou un de ses enfants (le placeholder ou le span)
                 let targetTag = e.target.closest('.tag');
                 
                 if (targetTag && targetTag.dataset.genre) {
                     const selectedGenre = targetTag.dataset.genre;
                     const currentLang = document.getElementById('language-select').value;
                     
-                    // Ouvre la modale avec le contenu du genre sélectionné
                     openModal(selectedGenre, currentLang);
                 }
             });
             
             // Fermer la modale en cliquant sur l'overlay
-            document.getElementById('genre-modal-overlay').addEventListener('click', function(e) {
-                if (e.target.id === 'genre-modal-overlay') {
-                    closeModal();
-                }
-            });
-
-
+            // La fonction est déjà définie 'onclick' sur l'overlay dans le HTML (meilleure compatibilité mobile)
+            
             // Language selector functionality
             document.getElementById('language-select').addEventListener('change', function() {
                 switchLanguage(this.value);
