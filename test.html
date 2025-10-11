@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- PALETTE : Warm Neutrals & Coral Pop (Latino Vibe) -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -20,9 +22,12 @@
         }
         .bg-primary { background-color: #FDF8F5; }
         .bg-secondary { background-color: #FAE8E8; } /* Soft, very light pink */
-        .bg-accent { background-color: #FF6B6B; } /* Vibrant coral red */
+        .bg-accent { background-color: #FF6B6B; } /* Vibrant coral red (Latino Energy) */
         .text-accent { color: #FF6B6B; }
         .border-accent { border-color: #FF6B6B; }
+
+        /* Suppression des styles bleus et réaffectation */
+
         .btn {
             display: inline-block;
             padding: 0.75rem 1.5rem;
@@ -35,33 +40,52 @@
         .btn-accent {
             background-color: #FF6B6B;
             color: #FFFFFF;
-            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2); /* Soft initial shadow */
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2);
         }
         .btn-accent:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.5), 0 0 20px rgba(255, 107, 107, 0.3); /* More pronounced glow */
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.5), 0 0 20px rgba(255, 107, 107, 0.3);
         }
+        
+        /* Animation pour le "Peps" */
+        @keyframes pulse-once {
+            0% { transform: scale(1); box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 0 0 5px rgba(255, 107, 107, 0.1); }
+            100% { transform: scale(1); box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2); }
+        }
+        .btn-pulse {
+            animation: pulse-once 1.5s ease-out 1;
+        }
+
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
         }
+        /* Style des tags en carreaux (Tiles) */
         .tag {
             cursor: pointer;
             transition: all 0.2s;
             border: 2px solid transparent;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for tags */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 120px; /* Taille fixe pour le carré */
+            height: 120px; /* Taille fixe pour le carré */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #332E2B;
         }
-        .tag.active {
-            background-color: #FF6B6B;
-            color: #FFFFFF;
+        .tag:hover {
             border-color: #FF6B6B;
-            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.4); /* Glow for active tag */
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(255, 107, 107, 0.5);
         }
-        .tag:not(.active):hover {
-            border-color: #FF6B6B;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+
         .chart-container {
             position: relative;
             margin: auto;
@@ -72,19 +96,19 @@
         html {
             scroll-behavior: smooth;
         }
-        /* Subtle text shadow for a "sparkle" effect on main title */
+        /* Style pour plus de Peps dans le titre - utilise accent */
         .hero-title-shadow {
-            text-shadow: 2px 2px 8px rgba(255, 107, 107, 0.3), 0 0 15px rgba(255, 107, 107, 0.1);
+            text-shadow: 2px 4px 10px rgba(255, 107, 107, 0.4), 0 0 20px rgba(255, 107, 107, 0.2);
         }
-        /* Enhanced shadow for header to give a subtle lift/glow */
         .header-glow {
             box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+            background-image: linear-gradient(135deg, #FAE8E8 0%, #FDF8F5 100%);
         }
         .language-selector {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            z-index: 10;
+            z-index: 50; 
         }
         .disclaimer-note {
             background-color: #fff;
@@ -98,38 +122,103 @@
             margin-left: auto;
             margin-right: auto;
             text-align: center;
+            z-index: 5;
+            position: relative;
+        }
+        /* Style pour les puces dans la section Expérience - utilise la couleur accent */
+        .experience-bullet {
+            color: #FF6B6B; 
+            margin-right: 0.75rem;
+        }
+
+        /* NOUVEAU STYLE : Fenêtre Modale pour la description des genres */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(4px); /* Effet de flou pour le peps */
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background-color: #FDF8F5; 
+            color: #332E2B;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            max-width: 90%;
+            width: 500px; /* Taille pour un "pop-up" */
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #FF6B6B;
+            transition: transform 0.1s;
+        }
+        .modal-close:hover {
+            transform: rotate(90deg);
         }
     </style>
 </head>
 <body class="bg-primary">
 
-    <header id="home" class="h-dvh min-h-[600px] flex flex-col items-center justify-center text-center p-6 bg-secondary header-glow relative">
+    <!-- Header / Hero Section -->
+    <header id="home" class="h-dvh min-h-[600px] flex flex-col items-center justify-center text-center p-6 bg-secondary header-glow relative z-20">
         <div class="language-selector">
             <label for="language-select" class="sr-only">Choisir la langue</label>
             <select id="language-select" class="bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-accent focus:border-accent sm:text-sm">
                 <option value="fr">Français</option>
                 <option value="en">English</option>
-                </select>
+                <!-- <option value="ko">한국어</option> -->
+            </select>
         </div>
         <div id="koreanDisclaimer" class="disclaimer-note hidden">
-            </div>
+            <!-- Disclaimer text will be inserted here by JS -->
+        </div>
 
         <div class="max-w-3xl">
-            <div class="text-6xl mb-4 text-gray-700">
+            <!-- Emplacement pour le casque DJ - utilise accent -->
+            <div class="text-6xl mb-4 text-accent">
                 <span>🎧</span>
             </div>
-            <h1 id="heroTitle" class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-gray-800 hero-title-shadow">DJ GAETANE</h1>
-            <p id="heroSubtitle" class="mt-4 text-xl md:text-2xl text-gray-600">DJ Latino & Créatrice d'ambiance</p>
+            <!-- Titre en Coral Red pour la chaleur et le peps -->
+            <h1 id="heroTitle" class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-accent hero-title-shadow">DJ GAETANE</h1>
+            <p id="heroSubtitle" class="mt-4 text-xl md:text-2xl text-gray-800 font-extrabold">DJ Latino & Créatrice d'ambiance</p>
             <p id="heroDescription" class="mt-6 max-w-xl mx-auto text-lg text-gray-700">Je transforme chaque soirée en une expérience mémorable où la joie et la danse sont reines. Ma mission : rendre les gens heureux par la musique.</p>
             <div class="mt-10">
-                <a href="#contact" id="contactBtn" class="btn btn-accent">Me Contacter</a>
-                <a href="#mixes" id="listenMixesBtn" class="btn text-accent font-bold ml-4">Écouter mes mixes</a>
+                <!-- Ajout de la classe btn-pulse pour l'animation -->
+                <a href="#contact" id="contactBtn" class="btn btn-accent btn-pulse">Me Contacter</a>
+                <a href="#mixes" id="listenMixesBtn" class="btn text-accent font-bold ml-4 border border-accent hover:bg-accent hover:text-white transition duration-200">Écouter mes mixes</a>
             </div>
         </div>
     </header>
+    
+    <!-- Barre de Navigation Fixe (z-50) -->
+    <nav class="fixed top-0 w-full bg-secondary shadow-lg z-50">
+        <!-- Contenu de la navigation (laisser vide car vous n'en avez pas explicitement) -->
+    </nav>
+
 
     <main>
-        <section id="at" class="py-20 px-6">
+        <!-- About Section -->
+        <section id="at" class="py-20 px-6 pt-24"> 
             <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
                 <div>
                     <h2 id="aboutTitle" class="font-display section-title mb-6">La musique comme thérapie</h2>
@@ -142,36 +231,57 @@
             </div>
         </section>
 
+        <!-- Musical Style Section (Nouvelle présentation en Tiles et Modale) -->
         <section id="style" class="py-20 px-6 bg-secondary relative z-10">
             <div class="max-w-5xl mx-auto text-center">
                 <h2 id="musicalStyleTitle" class="font-display section-title mb-4">Mon Univers Musical</h2>
-                <p id="musicalStyleDescription" class="max-w-2xl mx-auto text-lg mb-10 text-center">Je navigue avec aisance entre différents styles pour m'adapter à l'énergie de la piste. Cliquez sur un style pour en savoir plus sur mon approche.</p>
-                <div id="genre-tags" class="flex flex-wrap justify-center gap-3 mb-8">
-                    <span class="tag bg-white shadow-md rounded-full px-6 py-2 font-bold text-lg active" data-genre="salsa" id="salsaTag">Salsa</span>
-                    <span class="tag bg-white shadow-md rounded-full px-6 py-2 font-bold text-lg" data-genre="bachata" id="bachataTag">Bachata</span>
-                    <span class="tag bg-white shadow-md rounded-full px-6 py-2 font-bold text-lg" data-genre="konpa" id="konpaTag">Konpa</span>
-                    <span class="tag bg-white shadow-md rounded-full px-6 py-2 font-bold text-lg" data-genre="zouk" id="zoukTag">Zouk</span>
-                    <span class="tag bg-white shadow-md rounded-full px-6 py-2 font-bold text-lg" data-genre="kizomba" id="kizombaTag">Kizomba</span>
+                <p id="musicalStyleDescription" class="max-w-4xl mx-auto text-lg mb-10 text-center">Je navigue avec aisance entre différents styles. Cliquez sur un genre pour découvrir mon approche et le faire danser!</p>
+                
+                <!-- Conteneur des Tags en forme de carrés -->
+                <div id="genre-tags" class="flex flex-wrap justify-center gap-6 p-4">
+                    <span class="tag shadow-lg hover:shadow-xl" data-genre="salsa" id="salsaTag">
+                        <!-- CHANGEMENT ICI : Chili Pepper remplacé par Danseuse -->
+                        <span class="text-3xl mb-2">💃</span>Salsa
+                    </span>
+                    <span class="tag shadow-lg hover:shadow-xl" data-genre="bachata" id="bachataTag">
+                        <span class="text-3xl mb-2">💖</span>Bachata
+                    </span>
+                    <span class="tag shadow-lg hover:shadow-xl" data-genre="konpa" id="konpaTag">
+                        <span class="text-3xl mb-2">🥁</span>Konpa
+                    </span>
+                    <span class="tag shadow-lg hover:shadow-xl" data-genre="zouk" id="zoukTag">
+                        <span class="text-3xl mb-2">🌴</span>Zouk
+                    </span>
+                    <span class="tag shadow-lg hover:shadow-xl" data-genre="kizomba" id="kizombaTag">
+                        <span class="text-3xl mb-2">🔥</span>Kizomba
+                    </span>
                 </div>
-                <div id="genre-description" class="max-w-2xl mx-auto text-lg p-6 bg-secondary rounded-lg shadow-inner min-h-[150px] flex items-center justify-center">
-                    </div>
+                <!-- L'ancienne div description est supprimée ici car elle est maintenant dans la Modale -->
             </div>
         </section>
 
-        <section id="experience" class="py-20 px-6">
+        <!-- Experience Section (Revisité pour le style "Commentaire" / Références) -->
+        <section id="experience" class="py-20 px-6 bg-primary"> 
             <div class="max-w-6xl mx-auto">
                 <h2 id="experienceTitle" class="font-display section-title text-center mb-12">Expérience & Références</h2>
                 <div class="grid md:grid-cols-2 gap-10">
-                    <div class="bg-secondary p-8 rounded-lg shadow-lg">
-                        <h3 id="residencesTitle" class="font-display text-3xl font-bold mb-6 text-center text-accent">Résidences</h3>
+                    <!-- Résidences Box - utilise border-accent -->
+                    <div class="bg-white p-8 rounded-xl shadow-2xl border-b-4 border-accent transform transition hover:scale-[1.01] duration-300">
+                        <h3 id="residencesTitle" class="font-display text-3xl font-bold mb-6 text-center text-accent flex items-center justify-center">
+                            <span class="mr-3 text-4xl">🎤</span> Résidences
+                        </h3>
                         <ul class="space-y-4 text-lg">
-                            <li id="javaResidence" class="flex items-center"><span class="text-accent mr-3">●</span><strong>LA JAVA (Niort)</strong> - Un jeudi par mois</li>
-                            <li id="lsfResidence" class="flex items-center"><span class="text-accent mr-3">●</span><strong>Soiree LSF (Niort)</strong> - Un vendredi par mois</li>
-                            <li id="otherNiortResidences" class="flex items-center"><span class="text-accent mr-3">●</span>Soirées régulières dans divers lieux niortais</li>
+                            <!-- Bullet en accent color -->
+                            <li id="javaResidence" class="flex items-center"><span class="experience-bullet">●</span><strong>LA JAVA (Niort)</strong> - Un jeudi par mois</li>
+                            <li id="lsfResidence" class="flex items-center"><span class="experience-bullet">●</span><strong>Soiree LSF (Niort)</strong> - Un vendredi par mois</li>
+                            <li id="otherNiortResidences" class="flex items-center"><span class="experience-bullet">●</span>Soirées régulières dans divers lieux niortais</li>
                         </ul>
                     </div>
-                    <div class="bg-secondary p-8 rounded-lg shadow-lg">
-                        <h3 id="festivalsTitle" class="font-display text-3xl font-bold mb-6 text-center text-accent">Festivals & Événements</h3>
+                    <!-- Festivals Box - utilise border-accent -->
+                    <div class="bg-white p-8 rounded-xl shadow-2xl border-b-4 border-accent transform transition hover:scale-[1.01] duration-300">
+                        <h3 id="festivalsTitle" class="font-display text-3xl font-bold mb-6 text-center text-accent flex items-center justify-center">
+                             <span class="mr-3 text-4xl">🎉</span> Festivals & Événements
+                        </h3>
                         <ul class="space-y-4 text-lg">
                             <li id="onlySalsaFestival" class="flex items-center"><span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> (La Rochelle)</li>
                             <li id="soDanceFestival" class="flex items-center"><span class="text-accent mr-3">●</span><strong>So Dance Festival</strong> (La Rochelle)</li>
@@ -180,9 +290,19 @@
                         </ul>
                     </div>
                 </div>
+                
+                <!-- Bloc de Citation/Témoignage - utilise bg-accent pour le peps -->
+                <div class="mt-16 bg-accent text-white p-8 md:p-12 rounded-xl shadow-2xl">
+                    <p class="text-xl md:text-2xl italic font-light">
+                        "Gaetane n'est pas seulement technique, elle lit la salle. Chaque set est une montée en puissance émotionnelle et rythmique. Le public ne s'est jamais autant déchaîné!"
+                    </p>
+                    <p class="mt-4 text-right font-bold text-lg">- Un Organisateur (Exemple de Référence)</p>
+                </div>
+
             </div>
         </section>
 
+        <!-- Mixes Section -->
         <section id="mixes" class="py-20 px-6 bg-secondary text-center">
              <div class="max-w-3xl mx-auto">
                 <h2 id="mixesTitle" class="font-display section-title mb-4">Écoutez Mon Style</h2>
@@ -191,10 +311,11 @@
                     <a href="[Lien vers votre profil Tidal]" target="_blank" id="tidalBtn" class="btn btn-accent text-xl">
                         Tidal
                     </a>
-                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- Contact Section -->
         <footer id="contact" class="py-20 px-6 text-center">
             <div class="max-w-2xl mx-auto">
                 <h2 id="contactSectionTitle" class="font-display section-title mb-4">Donnons vie à votre événement</h2>
@@ -203,17 +324,27 @@
                 <p class="text-xl font-semibold mb-2"><a href="mailto:mysswyng@gmail.com" class="hover:underline">mysswyng@gmail.com</a></p>
                 <p class="text-xl font-semibold mb-8"><a href="tel:+33621933739" class="hover:underline">06 21 93 37 39</a></p>
                 <div class="flex justify-center space-x-4">
+                    <!-- Ajoutez ici des liens vers vos réseaux sociaux si vous en avez -->
                     <p class="text-xl font-semibold mb-2"><a href="https://www.instagram.com/enateag_yol/" class="hover:underline">Instagram</a></p>
                 </div>
             </div>
         </footer>
     </main>
 
+    <!-- NOUVELLE STRUCTURE DE MODALE (POP-UP) -->
+    <div id="genre-modal-overlay" class="modal-overlay">
+        <div id="genre-modal-content" class="modal-content">
+            <span class="modal-close" onclick="closeModal()">✖</span>
+            <h3 id="modal-title" class="font-display text-4xl font-bold text-accent mb-4"></h3>
+            <p id="modal-description" class="text-lg"></p>
+        </div>
+    </div>
+    <!-- FIN DE LA MODALE -->
+
     <script>
         let styleChartInstance = null; // To store the Chart.js instance
 
         const translations = {
-            // ... (Vos traductions FR, EN, KO restent inchangées) ...
             fr: {
                 pageTitle: "DJ GAETANE - DJ Latino",
                 heroTitle: "DJ GAETANE",
@@ -226,7 +357,7 @@
                 aboutParagraph2: "Être une femme dans ce milieu est un défi qui me pousse à être encore plus rigoureuse et créative. Reconnue pour mon sérieux et la qualité de mes sets, je ne demande qu'à avoir la chance de le prouver sur de nouvelles scènes.",
                 chartTitle: "🎵 Mon Focus Musical Principal",
                 musicalStyleTitle: "Mon Univers Musical",
-                musicalStyleDescription: "Je navigue avec aisance entre différents styles pour m'adapter à l'énergie de la piste. Cliquez sur un style pour en savoir plus sur mon approche.",
+                musicalStyleDescription: "Je navigue avec aisance entre différents styles. Cliquez sur un genre pour découvrir mon approche et le faire danser!",
                 salsaTag: "Salsa",
                 bachataTag: "Bachata",
                 konpaTag: "Konpa",
@@ -239,13 +370,13 @@
                 kizombaDesc: "Pour les moments de connexion et de douceur, je sélectionne avec soin des morceaux de Kizomba. Un style captivant qui invite à la proximité et à la musicalité.",
                 experienceTitle: "Expérience & Références",
                 residencesTitle: "Résidences",
-                javaResidence: "LA JAVA (Niort) - Un jeudi par mois",
-                lsfResidence: "Soirée LSF (Niort) - Un vendredi par mois",
+                javaResidence: "Un jeudi par mois",
+                lsfResidence: "Un vendredi par mois",
                 otherNiortResidences: "Soirées régulières dans divers lieux niortais",
                 festivalsTitle: "Festivals & Événements",
-                onlySalsaFestival: "Only Salsa Festival (La Rochelle)",
-                soDanceFestival: "So Dance Festival (La Rochelle)",
-                nssfFestival: "NSSF - Niort Salsa Swing Festival (Niort)",
+                onlySalsaFestival: "(La Rochelle)",
+                soDanceFestival: "(La Rochelle)",
+                nssfFestival: "(Niort)",
                 variousCitiesEvents: "Soirées et événements dans diverses villes de France (Angers, Pau, Tours...)",
                 mixesTitle: "Écoutez Mon Style",
                 mixesDescription: "Rien de mieux qu'un extrait pour vous faire une idée. Découvrez mes mixes sur les plateformes suivantes :",
@@ -266,7 +397,7 @@
                 aboutParagraph2: "Being a woman in this industry is a challenge that pushes me to be even more rigorous and creative. Recognized for my professionalism and the quality of my sets, I only ask for the chance to prove it on new stages.",
                 chartTitle: "🎵 My Main Musical Focus",
                 musicalStyleTitle: "My Musical Universe",
-                musicalStyleDescription: "I effortlessly navigate different styles to adapt to the energy of the dance floor. Click on a style to learn more about my approach.",
+                musicalStyleDescription: "I effortlessly navigate different styles. Click on a genre to discover my approach and get people dancing!",
                 salsaTag: "Salsa",
                 bachataTag: "Bachata",
                 konpaTag: "Konpa",
@@ -279,13 +410,13 @@
                 kizombaDesc: "For moments of connection and softness, I carefully select Kizomba tracks. A captivating style that invites closeness and musicality.",
                 experienceTitle: "Experience & References",
                 residencesTitle: "Residencies",
-                javaResidence: "LA JAVA (Niort) - One Thursday per month",
-                lsfResidence: "Party LSF (Niort) - One Friday per month",
+                javaResidence: "One Thursday per month",
+                lsfResidence: "One Friday per month",
                 otherNiortResidences: "Regular parties in various Niort venues",
                 festivalsTitle: "Festivals & Events",
-                onlySalsaFestival: "Only Salsa Festival (La Rochelle)",
-                soDanceFestival: "So Dance Festival (La Rochelle)",
-                nssfFestival: "NSSF - Niort Salsa Swing Festival (Niort)",
+                onlySalsaFestival: "(La Rochelle)",
+                soDanceFestival: "(La Rochelle)",
+                nssfFestival: "(Niort)",
                 variousCitiesEvents: "Parties and events in various French cities (Angers, Pau, Tours...)",
                 mixesTitle: "Listen to My Style",
                 mixesDescription: "There's nothing better than an excerpt to give you an idea. Discover my mixes on the following platforms:",
@@ -306,7 +437,7 @@
                 aboutParagraph2: "이 업계에서 여성으로 활동하는 것은 저를 더욱 엄격하고 창의적으로 만드는 도전입니다. 저의 전문성과 믹스의 품질로 인정받고 있으며, 새로운 무대에서 저의 능력을 증명할 기회를 간절히 바랍니다.",
                 chartTitle: "🎵 주요 음악 장르",
                 musicalStyleTitle: "나의 음악 세계",
-                musicalStyleDescription: "저는 댄스 플로어의 에너지에 맞춰 다양한 스타일을 능숙하게 넘나듭니다. 스타일에 대해 더 자세히 알아보려면 클릭하세요.",
+                musicalStyleDescription: "저는 댄스 플로어의 에너지에 맞춰 다양한 스타일을 능숙하게 넘나듭니다. 스타일을 클릭하여 저의 접근 방식을 확인하고 춤추게 하세요!",
                 salsaTag: "살사",
                 bachataTag: "바차타",
                 konpaTag: "콤파",
@@ -316,25 +447,50 @@
                 bachataDesc: "관능적이고 현대적이거나 도미니카 스타일의 바차타를 통해 댄서들을 다양한 감정의 여정으로 이끄는 것을 좋아합니다. 부드러움과 연결의 터치입니다.",
                 konpaDesc: "축제 분위기의 활기찬 바이브! 콤파는 제 파티에 독특한 풍미를 더하며, 모두를 놀라게 하고 춤추게 하기에 완벽합니다.",
                 zoukDesc: "부드러운 리듬과 매혹적인 멜로디의 주크는 낭만적인 분위기를 조성하고 댄서들이 유연하고 관능적으로 자신을 표현할 수 있도록 완벽합니다.",
-                kizombaDesc: "더욱 깊은 연결의 순간을 위해, 키좀바 트랙을 신중하게 선택합니다. 밀접함과 음악적 감성을 불러일으키는 매혹적인 스타일입니다.",
+                kizombaDesc: "더욱 깊은 연결의 순간을 위해, 키좀바 트랙을 신중하게 선택합니다. 밀접함과 음악적 감성을 불러일으키는 매혹적인 스타일입니다。",
                 experienceTitle: "경험 및 경력",
                 residencesTitle: "상주 공연",
-                javaResidence: "LA JAVA (Niort) - 매월 셋째 목요일",
-                lsfResidence: "파티 LSF (Niort) - 매월 셋째 금요일",
+                javaResidence: "매월 셋째 목요일",
+                lsfResidence: "매월 셋째 금요일",
                 otherNiortResidences: "니오르의 다양한 장소에서 정기적인 파티",
                 festivalsTitle: "페스티벌 및 이벤트",
-                onlySalsaFestival: "온리 살사 페스티벌 (라 로셸)",
-                soDanceFestival: "쏘 댄스 페스티벌 (라 로셸)",
-                nssfFestival: "NSSF - 니오르 살사 스윙 페스티벌 (니오르)",
+                onlySalsaFestival: "(라 로셸)",
+                soDanceFestival: "(라 로셸)",
+                nssfFestival: "(니오르)",
                 variousCitiesEvents: "프랑스의 다양한 도시에서 열리는 파티 및 행사 (앙제, 포, 투르 등)",
                 mixesTitle: "내 스타일 듣기",
                 mixesDescription: "아이디어를 얻는 데 발췌본보다 더 좋은 것은 없습니다. 다음 플랫폼에서 제 믹스를 발견하세요:",
                 tidalBtn: "타이달",
                 contactSectionTitle: "이벤트를 현실로 만들어 보세요",
-                contactDescription: "협업할 준비가 되셨나요? 프랑스 및 해외 페스티벌, 프라이빗 파티 또는 상주 공연에 참여할 수 있습니다. 프로젝트에 대해 논의하려면 저에게 연락하세요.",
+                contactDescription: "협업할 준비가 되셨나요? 프랑스 및 해외 페스티벌, 프라이빗 파티 또는 상주 공연에 참여할 수 있습니다. 프로젝트에 대해 논의하려면 저에게 연락하세요。",
                 koreanDisclaimerText: "Veuillez noter que la traduction coréenne est une ébauche et peut contenir des erreurs, car je suis encore en train d'apprendre la langue. Merci de votre compréhension."
             }
         };
+
+        // Fonction pour ouvrir la modale
+        function openModal(genre, lang) {
+            const t = translations[lang];
+            const modalOverlay = document.getElementById('genre-modal-overlay');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            
+            // Trouver le nom du genre (pour le titre) et la description
+            let genreName = t[`${genre}Tag`];
+            const description = t[`${genre}Desc`];
+
+            modalTitle.textContent = genreName;
+            modalDescription.textContent = description;
+
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => modalOverlay.classList.add('open'), 10); // Ajout de la classe après un court délai pour la transition
+        }
+
+        // Fonction pour fermer la modale
+        function closeModal() {
+            const modalOverlay = document.getElementById('genre-modal-overlay');
+            modalOverlay.classList.remove('open');
+            setTimeout(() => modalOverlay.style.display = 'none', 300); // Masquer après la transition
+        }
 
         function switchLanguage(lang) {
             const t = translations[lang];
@@ -352,37 +508,32 @@
             document.getElementById('aboutParagraph2').textContent = t.aboutParagraph2;
             document.getElementById('musicalStyleTitle').textContent = t.musicalStyleTitle;
             document.getElementById('musicalStyleDescription').textContent = t.musicalStyleDescription;
-            document.getElementById('salsaTag').textContent = t.salsaTag;
-            document.getElementById('bachataTag').textContent = t.bachataTag;
-            document.getElementById('konpaTag').textContent = t.konpaTag;
-            document.getElementById('zoukTag').textContent = t.zoukTag;
-            document.getElementById('kizombaTag').textContent = t.kizombaTag;
+            
+            // Mise à jour des Tags (uniquement le texte, les icônes restent)
+            document.getElementById('salsaTag').lastChild.textContent = t.salsaTag;
+            document.getElementById('bachataTag').lastChild.textContent = t.bachataTag;
+            document.getElementById('konpaTag').lastChild.textContent = t.konpaTag;
+            document.getElementById('zoukTag').lastChild.textContent = t.zoukTag;
+            document.getElementById('kizombaTag').lastChild.textContent = t.kizombaTag;
+
             document.getElementById('experienceTitle').textContent = t.experienceTitle;
-            document.getElementById('residencesTitle').textContent = t.residencesTitle;
-            document.getElementById('javaResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>LA JAVA (Niort)</strong> - ${t.javaResidence.split(' - ')[1]}`;
-            document.getElementById('lsfResidence').innerHTML = `<span class="text-accent mr-3">●</span><strong>${t.lsfResidence.split(' - ')[0]}</strong>- ${t.lsfResidence.split(' - ')[1]}`;    
-            document.getElementById('otherNiortResidences').innerHTML = `<span class="text-accent mr-3">●</span>${t.otherNiortResidences}`;
-            document.getElementById('festivalsTitle').textContent = t.festivalsTitle;
-            document.getElementById('onlySalsaFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> ${t.onlySalsaFestival.split('Festival ')[1]}`;
-            document.getElementById('soDanceFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>So Dance Festival</strong> ${t.soDanceFestival.split('Festival ')[1]}`;
-            document.getElementById('nssfFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>NSSF - Niort Salsa Swing Festival</strong> ${t.nssfFestival.split('Festival ')[1]}`;
+            
+            // Updates for Experience section items (using innerHTML for icons/structure)
+            document.getElementById('residencesTitle').innerHTML = `<span class="mr-3 text-4xl">🎤</span> ${t.residencesTitle}`;
+            document.getElementById('javaResidence').innerHTML = `<span class="experience-bullet">●</span><strong>LA JAVA (Niort)</strong> - ${t.javaResidence}`;
+            document.getElementById('lsfResidence').innerHTML = `<span class="experience-bullet">●</span><strong>Soiree LSF (Niort)</strong> - ${t.lsfResidence}`;    
+            document.getElementById('otherNiortResidences').innerHTML = `<span class="experience-bullet">●</span>${t.otherNiortResidences}`;
+            document.getElementById('festivalsTitle').innerHTML = `<span class="mr-3 text-4xl">🎉</span> ${t.festivalsTitle}`;
+            document.getElementById('onlySalsaFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>Only Salsa Festival</strong> ${t.onlySalsaFestival}`;
+            document.getElementById('soDanceFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>So Dance Festival</strong> ${t.soDanceFestival}`;
+            document.getElementById('nssfFestival').innerHTML = `<span class="text-accent mr-3">●</span><strong>NSSF - Niort Salsa Swing Festival</strong> ${t.nssfFestival}`;
             document.getElementById('variousCitiesEvents').innerHTML = `<span class="text-accent mr-3">●</span>${t.variousCitiesEvents}`;
+            
             document.getElementById('mixesTitle').textContent = t.mixesTitle;
             document.getElementById('mixesDescription').textContent = t.mixesDescription;
             document.getElementById('tidalBtn').textContent = t.tidalBtn;
             document.getElementById('contactSectionTitle').textContent = t.contactSectionTitle;
             document.getElementById('contactDescription').textContent = t.contactDescription;
-
-            // CORRECTION 3: Mise à jour du genre actif après le changement de langue
-            const activeTag = document.querySelector('#genre-tags .tag.active');
-            // Assurez-vous qu'il y a un tag actif (devrait toujours être le cas, mais sécurité)
-            let currentActiveGenre = 'salsa';
-            if (activeTag) {
-                currentActiveGenre = activeTag.dataset.genre;
-            }
-
-            // Update genre descriptions
-            updateDescription(currentActiveGenre, lang); 
 
             // Update chart title
             if (styleChartInstance) {
@@ -399,40 +550,28 @@
             }
         }
 
-        // Modified updateDescription to accept language
-        function updateDescription(genre, lang = 'fr') { // Default to 'fr' if lang is not provided
-            const t = translations[lang];
-            const descriptions = {
-                salsa: t.salsaDesc,
-                bachata: t.bachataDesc,
-                konpa: t.konpaDesc,
-                zouk: t.zoukDesc,
-                kizomba: t.kizombaDesc
-            };
-            document.getElementById('genre-description').innerHTML = `<p>${descriptions[genre]}</p>`;
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             // Chart.js implementation
             const ctx = document.getElementById('styleChart').getContext('2d');
             styleChartInstance = new Chart(ctx, { // Assign to global variable
                 type: 'doughnut',
                 data: {
-                    labels: ['Salsa', 'Bachata', 'Konpa', 'Zouk & Kizomba'], // Kept combined for chart simplicity
+                    labels: ['Salsa', 'Bachata', 'Konpa', 'Zouk & Kizomba'], 
                     datasets: [{
                         label: 'Focus Musical',
                         data: [60, 25, 15],
+                        // Couleurs de la palette chaude
                         backgroundColor: [
-                            '#FF9AA2', // Light Pink
-                            '#FFB7B2', // Peach Pink
-                            '#FFDAC1'  // Light Orange/Cream
+                            '#FF6B6B', // Coral Red (Accent)
+                            '#FAE8E8', // Light Pink
+                            '#332E2B'  // Dark Text Color
                         ],
                         borderColor: [
-                            '#FDF8F5', // Border color to match background for a cleaner look
+                            '#FDF8F5', 
                             '#FDF8F5',
                             '#FDF8F5'
                         ],
-                        borderWidth: 2 // Slightly thicker border for separation
+                        borderWidth: 2 
                     }]
                 },
                 options: {
@@ -461,20 +600,29 @@
                 }
             });
 
-            // Interactive Genre Tags
+            // Interactive Genre Tags (maintenant pour ouvrir la modale)
             const genreTagsContainer = document.getElementById('genre-tags');
-            const tags = genreTagsContainer.querySelectorAll('.tag');
 
             genreTagsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag')) {
-                    const selectedGenre = e.target.dataset.genre;
+                // S'assurer qu'on clique sur le tag ou un de ses enfants
+                let targetTag = e.target.closest('.tag');
+                
+                if (targetTag && targetTag.dataset.genre) {
+                    const selectedGenre = targetTag.dataset.genre;
                     const currentLang = document.getElementById('language-select').value;
-                    updateDescription(selectedGenre, currentLang);
-                    tags.forEach(tag => {
-                        tag.classList.toggle('active', tag.dataset.genre === selectedGenre);
-                    });
+                    
+                    // Ouvre la modale avec le contenu du genre sélectionné
+                    openModal(selectedGenre, currentLang);
                 }
             });
+            
+            // Fermer la modale en cliquant sur l'overlay
+            document.getElementById('genre-modal-overlay').addEventListener('click', function(e) {
+                if (e.target.id === 'genre-modal-overlay') {
+                    closeModal();
+                }
+            });
+
 
             // Language selector functionality
             document.getElementById('language-select').addEventListener('change', function() {
@@ -483,7 +631,6 @@
 
             // Initial load in French
             switchLanguage('fr');
-            updateDescription('salsa', 'fr'); // Ensure initial genre description is also in French
         });
     </script>
 
